@@ -1,0 +1,48 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'kubernetes/app.yaml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Extract short commit hash
+        id: commit
+        run: echo "commit_id=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t 00mab/crud:${{ env.commit_id }} .
+
+      - name: Push Docker image
+        run: docker push 00mab/crud:${{ env.commit_id }}
+
+      - name: Update Kubernetes manifest
+        run: |
+           sed -i "s|\(00mab/crud:\).*|\1${{ env.commit_id }}|g" kubernetes/app.yaml
+
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: "MuhmmadAyan"
+          author_email: "muhmmadayanashiq@gmail.com"
+          message: "Updated manifest"
+          add: "kubernetes/app.yaml"
+          github_token: ${{ secrets.GH_TOKEN }}  # This is your GitHub token

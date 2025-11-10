@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Operations</title>
+</head>
+<body>
+<h1>CRUD Operations</h1>
+<button onclick="createTable()">Create Table</button>
+<button onclick="addItem()">Add Item</button>
+<button onclick="getItems()">Get Items</button>
+<button onclick="updateItem()">Update Item</button>
+<button onclick="deleteItem()">Delete Item</button>
+
+<div id="result"></div>
+
+<script>
+    function createTable() {
+        fetch('/createTable')
+            .then(response => response.text())
+            .then(data => document.getElementById('result').innerText = data);
+    }
+
+    function addItem() {
+        const name = prompt('Enter item name:');
+        fetch('/addItem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        })
+            .then(response => response.text())
+            .then(data => document.getElementById('result').innerText = data);
+    }
+
+    function getItems() {
+        fetch('/getItems')
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = '';
+                data.forEach(item => {
+                    resultDiv.innerHTML += `ID: ${item.id}, Name: ${item.name}<br>`;
+                });
+            });
+    }
+
+    function updateItem() {
+        const id = prompt('Enter item ID to update:');
+        const name = prompt('Enter new item name:');
+        fetch(`/updateItem/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        })
+            .then(response => response.text())
+            .then(data => document.getElementById('result').innerText = data);
+    }
+
+    function deleteItem() {
+        const id = prompt('Enter item ID to delete:');
+        fetch(`/deleteItem/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.text())
+            .then(data => document.getElementById('result').innerText = data);
+    }
+</script>
+</body>
+</html>
