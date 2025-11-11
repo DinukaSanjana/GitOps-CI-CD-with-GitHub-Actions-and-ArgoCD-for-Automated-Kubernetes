@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-app-container
-        image: 00mab/crud:f75424c
+        image: ddinuka/crud:f75424c
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
