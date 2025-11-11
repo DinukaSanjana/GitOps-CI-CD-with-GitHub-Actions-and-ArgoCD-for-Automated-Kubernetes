@@ -29,10 +29,10 @@ jobs:
         run: echo "commit_id=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: docker build -t 00mab/crud:${{ env.commit_id }} .
+        run: docker build -t ddinuka/crud:${{ env.commit_id }} .
 
       - name: Push Docker image
-        run: docker push 00mab/crud:${{ env.commit_id }}
+        run: docker push ddinuka/crud:${{ env.commit_id }}
 
       - name: Update Kubernetes manifest
         run: |
@@ -41,8 +41,8 @@ jobs:
       - name: Commit and push changes
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: "MuhmmadAyan"
-          author_email: "muhmmadayanashiq@gmail.com"
+          author_name: "Dinuka Sanjana"
+          author_email: "ddsmadhumal20@gmail.com@gmail.com"
           message: "Updated manifest"
           add: "kubernetes/app.yaml"
           github_token: ${{ secrets.GH_TOKEN }}  # This is your GitHub token
