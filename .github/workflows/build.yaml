@@ -36,7 +36,7 @@ jobs:
 
       - name: Update Kubernetes manifest
         run: |
-           sed -i "s|\(00mab/crud:\).*|\1${{ env.commit_id }}|g" kubernetes/app.yaml
+           sed -i "s|\(ddinuka/crud:\).*|\1${{ env.commit_id }}|g" kubernetes/app.yaml
 
       - name: Commit and push changes
         uses: EndBug/add-and-commit@v9
