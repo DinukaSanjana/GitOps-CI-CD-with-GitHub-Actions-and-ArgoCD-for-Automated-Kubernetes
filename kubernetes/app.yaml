@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-app-container
-        image: ddinuka/crud:4b349da
+        image: ddinuka/crud:a9ee706
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
